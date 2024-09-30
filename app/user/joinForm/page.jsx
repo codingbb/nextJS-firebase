@@ -1,4 +1,35 @@
+"use client";
+
+import UserInputFields from "@/components/userInputFields";
+import { useState } from "react";
+
 function JoinForm() {
+  //   const [username, setUsername] = useState("");
+  //   const [password, setPassword] = useState("");
+  //   const [confirmPassword, setConfirmPassword] = useState("");
+  //   const [email, setEmail] = useState("");
+  //   const [checkPassword, setCheckPassword] = useState(true);
+  //   const [checkEmail, setCheckEmail] = useState(null);
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+    email: "",
+    checkPassword: "",
+    checkEmail: "",
+  });
+
+  const getValue = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -9,58 +40,18 @@ function JoinForm() {
           </p>
 
           <form>
-            <div className="mb-4">
-              <label htmlFor="username" className="block text-gray-700">
-                유저네임
-              </label>
-              <input
-                type="text"
-                id="username"
-                value="username"
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-              />
-            </div>
+            <UserInputFields
+              getValue={getValue}
+              formData={formData}
+              isLoginForm={false}
+            />
 
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700">
-                비밀번호
-              </label>
-              <input
-                type="password"
-                id="password"
-                value="password"
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="confirmPassword" className="block text-gray-700">
-                비밀번호 확인
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value="confirmPassword"
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700">
-                이메일
-              </label>
-              <div className="flex">
-                <input
-                  type="email"
-                  id="email"
-                  value="email"
-                  className="w-full p-2 border border-gray-300 rounded-l mt-1"
-                />
-                <button className="bg-green-500 text-white px-4 rounded-r mt-1">
-                  인증
-                </button>
-              </div>
-            </div>
+            <button
+              className="bg-green-500 text-white px-4 rounded-r mt-1"
+              type="button"
+            >
+              인증
+            </button>
 
             <button
               type="submit"

@@ -1,4 +1,39 @@
+"use client";
+import UserInputFields from "@/components/userInputFields";
+import { useState } from "react";
+
 function LoginForm() {
+  //   const [username, setUsername] = useState("");
+  //   const [password, setPassword] = useState("");
+
+  // id, password 입력
+  //   const getValue = (e) => {
+  //     // console.log("e 확인 ", e.target);
+  //     // console.log("e 확인 ", e.target.name, e.target.value);
+  //     const { name, value } = e.target;
+  //     // console.log(name, value);
+
+  //     if (name === "username") {
+  //       setUsername(value);
+  //     } else if (name === "password") {
+  //       setPassword(value);
+  //     }
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const getValue = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -9,29 +44,12 @@ function LoginForm() {
           </p>
 
           <form>
-            <div className="mb-4">
-              <label htmlFor="username" className="block text-gray-700">
-                ID
-              </label>
-              <input
-                type="text"
-                id="username"
-                value="ID"
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-              />
-            </div>
+            <UserInputFields
+              getValue={getValue}
+              formData={formData}
+              isLoginForm={true}
+            />
 
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700">
-                PASSWORD
-              </label>
-              <input
-                type="password"
-                id="password"
-                value="PASSWORD"
-                className="w-full p-2 border border-gray-300 rounded mt-1"
-              />
-            </div>
             <button
               type="submit"
               className="w-full bg-gray-400 text-white p-2 rounded mt-4"
