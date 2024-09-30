@@ -35,6 +35,18 @@ function LoginForm() {
               로그인
             </button>
           </form>
+          <button
+            type="button"
+            className="w-full bg-gray-400 text-white p-2 rounded mt-4"
+          >
+            구글 로그인
+          </button>
+          <button
+            type="button"
+            className="w-full bg-gray-400 text-white p-2 rounded mt-4"
+          >
+            깃허브 로그인
+          </button>
         </div>
       </div>
     </>

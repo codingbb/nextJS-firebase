@@ -3,8 +3,11 @@
 import UserInputFields from "@/components/userInputFields";
 import GetFieldsValue from "@/components/getFieldsValue";
 import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 function JoinForm() {
+  const router = useRouter();
   const [value, getValue] = GetFieldsValue({
     username: "",
     password: "",
@@ -14,7 +17,32 @@ function JoinForm() {
     checkEmail: "",
   });
 
-  console.log("Value ", value);
+  //   console.log("Value ", value);
+
+  const join = async (e) => {
+    e.preventDefault();
+
+    const { username, password, email } = value;
+    console.log(username, password, email);
+
+    try {
+      const response = await axios.post("/api/join", {
+        username,
+        password,
+        email,
+      });
+      console.log("Front response = ", response);
+
+      if (response.status === 200) {
+        alert("회원가입 성공");
+        router.push("/");
+      }
+    } catch (error) {
+      if (error.response) {
+        alert("에러");
+      }
+    }
+  };
 
   return (
     <>
@@ -25,7 +53,7 @@ function JoinForm() {
             마음을 담아 만드는 JStory
           </p>
 
-          <form>
+          <form onSubmit={join}>
             <UserInputFields
               getValue={getValue}
               formData={value}
