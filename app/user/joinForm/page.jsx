@@ -1,17 +1,11 @@
 "use client";
 
 import UserInputFields from "@/components/userInputFields";
+import GetFieldsValue from "@/components/getFieldsValue";
 import { useState } from "react";
 
 function JoinForm() {
-  //   const [username, setUsername] = useState("");
-  //   const [password, setPassword] = useState("");
-  //   const [confirmPassword, setConfirmPassword] = useState("");
-  //   const [email, setEmail] = useState("");
-  //   const [checkPassword, setCheckPassword] = useState(true);
-  //   const [checkEmail, setCheckEmail] = useState(null);
-
-  const [formData, setFormData] = useState({
+  const [value, getValue] = GetFieldsValue({
     username: "",
     password: "",
     confirmPassword: "",
@@ -20,15 +14,7 @@ function JoinForm() {
     checkEmail: "",
   });
 
-  const getValue = (e) => {
-    const { name, value } = e.target;
-    console.log(name, value);
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  console.log("Value ", value);
 
   return (
     <>
@@ -42,7 +28,7 @@ function JoinForm() {
           <form>
             <UserInputFields
               getValue={getValue}
-              formData={formData}
+              formData={value}
               isLoginForm={false}
             />
 
