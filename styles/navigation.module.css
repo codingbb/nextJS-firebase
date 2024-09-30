@@ -1,3 +1,4 @@
+/* navigation.module.css */
 .nav {
   background-color: #31b4a0; /* 네비게이션 바 배경색 */
   padding: 10px 20px;
@@ -33,4 +34,8 @@
 
 .active .linkCheck {
   width: 100%;
+}
+
+.active {
+  color: #ffcc00 !important;
 }
