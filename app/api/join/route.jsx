@@ -1,5 +1,5 @@
-// 서버
-// import { success, fail } from "../../util/ApiUtil";
+// // 서버
+// // import { success, fail } from "../../util/ApiUtil";
 
 export async function POST(request) {
   console.log("server join request " + JSON.stringify(request));
@@ -26,3 +26,16 @@ export async function POST(request) {
     return fail(null, 500, "서버 오류");
   }
 }
+
+// app/api/join/route.jsx
+
+// export async function POST(req) {
+//   const body = await req.json();
+//   const { username, password, email } = body;
+
+//   // 여기서 회원가입 로직을 처리합니다 (예: 데이터베이스 저장 등)
+
+//   return new Response(JSON.stringify({ message: "회원가입 성공" }), {
+//     status: 200,
+//   });
+// }
