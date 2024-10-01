@@ -1,13 +1,13 @@
 "use client";
 
 import UserInputFields from "@/components/userInputFields";
-import GetFieldsValue from "@/components/getFieldsValue";
+import useGetFieldsValue from "@/components/useGetFieldsValue";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
 function JoinForm() {
   const router = useRouter();
-  const [value, getValue] = GetFieldsValue({
+  const [value, getValue] = useGetFieldsValue({
     username: "",
     password: "",
     confirmPassword: "",

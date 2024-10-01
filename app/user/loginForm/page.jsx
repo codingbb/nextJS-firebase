@@ -1,10 +1,10 @@
 "use client";
 
 import UserInputFields from "@/components/userInputFields";
-import GetFieldsValue from "@/components/getFieldsValue";
+import useGetFieldsValue from "@/components/useGetFieldsValue";
 
 function LoginForm() {
-  const [value, getValue] = GetFieldsValue({
+  const [value, getValue] = useGetFieldsValue({
     username: "",
     password: "",
   });
