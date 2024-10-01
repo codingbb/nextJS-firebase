@@ -2,15 +2,33 @@
 
 import UserInputFields from "@/components/userInputFields";
 import useGetFieldsValue from "@/components/useGetFieldsValue";
+import { useState } from "react";
 
 function LoginForm() {
-  const [value, getValue] = useGetFieldsValue({
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  // const [value, getValue] = useGetFieldsValue({
+  //   username: "",
+  //   password: "",
+  // });
+
+  // console.log("Vale ", value);
+  // console.log("getVale ", getValue);
+
+  const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
-  console.log("Vale ", value);
-  console.log("getVale ", getValue);
+  const getValue = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   return (
     <>
@@ -22,11 +40,40 @@ function LoginForm() {
           </p>
 
           <form>
-            <UserInputFields
+            {/* <UserInputFields
               getValue={getValue}
               formData={value}
               isLoginForm={true}
-            />
+            /> */}
+            <div className="mb-4">
+              <label htmlFor="username" className="block text-gray-700">
+                유저네임
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={getValue}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-gray-700">
+                비밀번호
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={getValue}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                required
+              />
+            </div>
 
             <button
               type="submit"

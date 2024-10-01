@@ -1,6 +1,8 @@
 // // 서버
 // // import { success, fail } from "../../util/ApiUtil";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(request) {
   console.log("server join request " + JSON.stringify(request));
 

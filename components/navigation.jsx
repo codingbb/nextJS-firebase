@@ -18,13 +18,17 @@ function Navigation() {
           <li>카테고리관리</li>
           <li>로그아웃</li>
 
-          <li className={path == "/user/loginForm" ? styles.active : ""}>
+          {/* <li className={path == "/user/loginForm" ? styles.active : ""}> */}
+          <li>
             <Link href="/user/loginForm">로그인</Link>
           </li>
+          {/* </li> */}
 
-          <li className={path == "/user/joinForm" ? styles.active : ""}>
+          {/* <li className={path == "/user/joinForm" ? styles.active : ""}> */}
+          <li>
             <Link href="/user/joinForm">회원가입</Link>
           </li>
+          {/* </li> */}
         </ul>
       </nav>
     </>

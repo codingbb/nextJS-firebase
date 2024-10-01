@@ -1,28 +1,39 @@
 "use client";
 
-import UserInputFields from "@/components/userInputFields";
-import useGetFieldsValue from "@/components/useGetFieldsValue";
-import axios from "axios";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 function JoinForm() {
   const router = useRouter();
-  const [value, getValue] = useGetFieldsValue({
+  // const [username, setUsername] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [confirmPassword, setConfirmPassword] = useState("");
+  // const [email, setEmail] = useState("");
+
+  const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
     email: "",
-    checkPassword: "",
-    checkEmail: "",
   });
 
-  //   console.log("Value ", value);
+  const getValue = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const join = async (e) => {
     e.preventDefault();
 
-    const { username, password, email } = value;
-    console.log(username, password, email);
+    // console.log("확인 ", formData.username, formData.password, formData.email);
+    const { username, password, email } = formData;
+    console.log("확인 ", username, password, email);
 
     try {
       const response = await axios.post("/api/join", {
@@ -53,11 +64,65 @@ function JoinForm() {
           </p>
 
           <form onSubmit={join}>
-            <UserInputFields
-              getValue={getValue}
-              formData={value}
-              isLoginForm={false}
-            />
+            <div className="mb-4">
+              <label htmlFor="username" className="block text-gray-700">
+                유저네임
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={getValue}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-gray-700">
+                비밀번호
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={getValue}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="confirmPassword" className="block text-gray-700">
+                비밀번호 확인
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={getValue}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="email" className="block text-gray-700">
+                이메일
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={getValue}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                required
+              />
+            </div>
 
             <button
               className="bg-green-500 text-white px-4 rounded-r mt-1"
