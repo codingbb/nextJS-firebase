@@ -10,6 +10,7 @@ function LoginForm() {
   });
 
   console.log("Vale ", value);
+  console.log("getVale ", getValue);
 
   return (
     <>

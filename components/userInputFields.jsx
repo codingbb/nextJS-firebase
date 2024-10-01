@@ -1,6 +1,8 @@
 // "use client";
 
 function UserInputFields({ getValue, formData, isLoginForm }) {
+  console.log("userInput getValue ", getValue);
+  console.log("userInput formData ", formData);
   return (
     <>
       <div className="mb-4">
