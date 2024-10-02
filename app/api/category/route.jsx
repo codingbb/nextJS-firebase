@@ -8,6 +8,7 @@ export async function POST(request) {
     const dataJson = await request.json(); // request에서 JSON 데이터 읽기
     console.log("!1 = ", dataJson);
     const { category } = dataJson; // JSON 데이터에서 category 필드 읽기
+    console.log(category);
 
     // Firebase Firestore에 카테고리 추가
     const docRef = await addDoc(collection(db, "category"), {
