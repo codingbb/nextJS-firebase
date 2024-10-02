@@ -6,7 +6,19 @@ import { quillModules } from "@/components/QuillModules";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function WriteForm() {
-  const [value, setValue] = useState("");
+  // TODO: Auth 했을 때 ㄱㄱ 지금은 ㄴㄴ
+  // const [userId, setUserId] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  // TODO: 일단 파일 생략
+  // const [file, setFile] = useState("");
+
+  const [formData, setFormData] = useState({
+    selectedCategory: "",
+    title: "",
+    content: "",
+  });
 
   return (
     <>

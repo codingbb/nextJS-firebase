@@ -2,6 +2,8 @@ import "./globals.css";
 import Navigation from "../components/navigation";
 import Footer from "@/components/footer";
 import "react-quill/dist/quill.snow.css";
+// import firebase from "@/firebase/firebase";
+// console.log(firebase);
 
 export const metadata = {
   title: "Create Next App",

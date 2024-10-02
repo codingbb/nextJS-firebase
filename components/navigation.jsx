@@ -11,7 +11,9 @@ function Navigation() {
     <>
       <nav className={styles.nav}>
         <ul>
-          <li>내블로그</li>
+          <li>
+            <Link href="/">내블로그</Link>
+          </li>
           <li>글쓰기</li>
           <li>계정관리</li>
           <li>내구독리스트</li>
