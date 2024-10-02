@@ -1,5 +1,10 @@
 "use client";
 
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import { quillModules } from "@/components/QuillModules";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
 export default function UpdateForm() {
   return (
     <form>
@@ -17,10 +22,15 @@ export default function UpdateForm() {
         className="w-full p-2 mt-3 border rounded-md"
       />
 
-      <div className="mb-10 mt-3" id="content">
-        <div style={{ height: "500px", border: "1px solid #ccc" }}>
-          <p>컨텐츠를 입력하세요 (에디터를 대체한 영역)</p>
-        </div>
+      <div className="mb-10 mt-3">
+        <ReactQuill
+          id="content"
+          theme="snow"
+          value="value"
+          // onChange={setValue}
+          modules={quillModules}
+          style={{ height: "500px" }}
+        />
       </div>
 
       <div>

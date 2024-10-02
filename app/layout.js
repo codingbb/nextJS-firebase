@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navigation from "../components/navigation";
 import Footer from "@/components/footer";
+import "react-quill/dist/quill.snow.css";
 
 export const metadata = {
   title: "Create Next App",
