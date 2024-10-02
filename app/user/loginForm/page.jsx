@@ -3,6 +3,7 @@
 import UserInputFields from "@/components/userInputFields";
 import useGetFieldsValue from "@/components/useGetFieldsValue";
 import { useState } from "react";
+import useSocialLogin from "@/app/api/auth/google";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -28,6 +29,18 @@ function LoginForm() {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const onSocialClick = (e) => {
+    let socialName = e.target.name;
+    // alert(e.target.name);
+    if (socialName === "google") {
+      // alert("구글 로그인");
+      useSocialLogin(socialName);
+    } else if (socialName === "github") {
+      // alert("깃허브 로그인");
+      useSocialLogin(socialName);
+    }
   };
 
   return (
@@ -85,12 +98,16 @@ function LoginForm() {
           <button
             type="button"
             className="w-full bg-gray-400 text-white p-2 rounded mt-4"
+            name="google"
+            onClick={onSocialClick}
           >
             구글 로그인
           </button>
           <button
             type="button"
             className="w-full bg-gray-400 text-white p-2 rounded mt-4"
+            name="github"
+            onClick={onSocialClick}
           >
             깃허브 로그인
           </button>
