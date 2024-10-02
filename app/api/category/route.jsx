@@ -1,13 +1,13 @@
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
-console.log("들어는 가지요?? 네 들어는와요");
-
 export async function POST(request) {
   console.log("여기는 오나요?");
 
   try {
     const dataJson = await request.json(); // request에서 JSON 데이터 읽기
+    console.log("!1 = ", dataJson);
+    const { category } = dataJson; // JSON 데이터에서 category 필드 읽기
 
     // Firebase Firestore에 카테고리 추가
     const docRef = await addDoc(collection(db, "category"), {
