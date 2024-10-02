@@ -4,6 +4,13 @@ import UserInputFields from "@/components/userInputFields";
 import useGetFieldsValue from "@/components/useGetFieldsValue";
 import { useState } from "react";
 import useSocialLogin from "@/app/api/auth/google";
+import { auth } from "@/firebase/firebase";
+import {
+  // getAuth,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -15,6 +22,9 @@ function LoginForm() {
 
   // console.log("Vale ", value);
   // console.log("getVale ", getValue);
+
+  // 인증과 관련된 것들 초기화
+  // const auth = getAuth();
 
   const [formData, setFormData] = useState({
     username: "",
@@ -31,15 +41,43 @@ function LoginForm() {
     }));
   };
 
+  // 일단 빼지말고 해봅시다
   const onSocialClick = (e) => {
-    let socialName = e.target.name;
-    // alert(e.target.name);
+    const socialName = e.target.name;
+    alert(e.target.name);
+    // useSocialLogin(socialName);
     if (socialName === "google") {
-      // alert("구글 로그인");
-      useSocialLogin(socialName);
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const user = result.user;
+          console.log(token, user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          const email = error.customData.email;
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          console.log(errorCode, errorMessage, email, credential);
+        });
     } else if (socialName === "github") {
-      // alert("깃허브 로그인");
-      useSocialLogin(socialName);
+      const provider = new GithubAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const credential = GithubAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          const user = result.user;
+          console.log(token, user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          const email = error.customData.email;
+          const credential = GithubAuthProvider.credentialFromError(error);
+          console.log(errorCode, errorMessage, email, credential);
+        });
     }
   };
 
