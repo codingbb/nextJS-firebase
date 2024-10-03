@@ -2,6 +2,7 @@ import "./globals.css";
 import Navigation from "../components/navigation";
 import Footer from "@/components/footer";
 import "react-quill/dist/quill.snow.css";
+import AuthGuard from "@/components/AuthGuard";
 // import firebase from "@/firebase/firebase";
 // console.log(firebase);
 
@@ -14,9 +15,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Navigation />
-        <div>{children}</div>
-        <Footer />
+        <AuthGuard>
+          <Navigation />
+          <div>{children}</div>
+          <Footer />
+        </AuthGuard>
       </body>
     </html>
   );

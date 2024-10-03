@@ -5,6 +5,8 @@ import useGetFieldsValue from "@/components/useGetFieldsValue";
 import { useState } from "react";
 import useSocialLogin from "@/app/api/auth/google";
 import { auth } from "@/firebase/firebase";
+import { useRouter } from "next/navigation";
+
 import {
   // getAuth,
   GoogleAuthProvider,
@@ -15,6 +17,7 @@ import {
 function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   // const [value, getValue] = useGetFieldsValue({
   //   username: "",
   //   password: "",
@@ -44,7 +47,7 @@ function LoginForm() {
   // 일단 빼지말고 해봅시다
   const onSocialClick = (e) => {
     const socialName = e.target.name;
-    alert(e.target.name);
+    // alert(e.target.name);
     // useSocialLogin(socialName);
     if (socialName === "google") {
       const provider = new GoogleAuthProvider();
@@ -54,6 +57,7 @@ function LoginForm() {
           const token = credential.accessToken;
           const user = result.user;
           console.log(token, user);
+          router.push("/"); // 로그인 성공시 홈으로 이동
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -70,6 +74,7 @@ function LoginForm() {
           const token = credential.accessToken;
           const user = result.user;
           console.log(token, user);
+          router.push("/"); // 로그인 성공시 홈으로 이동
         })
         .catch((error) => {
           const errorCode = error.code;
