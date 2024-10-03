@@ -11,6 +11,11 @@ function JoinForm() {
   // const [confirmPassword, setConfirmPassword] = useState("");
   // const [email, setEmail] = useState("");
 
+  // const bcrypt = require("bcrypt");
+  // const saltRounds = 10;
+  // const myPlaintextPassword = "s0//P4$$w0rD";
+  // const someOtherPlaintextPassword = "not_bacon";
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
