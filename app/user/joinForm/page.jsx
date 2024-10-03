@@ -6,22 +6,13 @@ import axios from "axios";
 
 function JoinForm() {
   const router = useRouter();
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [confirmPassword, setConfirmPassword] = useState("");
-  // const [email, setEmail] = useState("");
-
-  // const bcrypt = require("bcrypt");
-  // const saltRounds = 10;
-  // const myPlaintextPassword = "s0//P4$$w0rD";
-  // const someOtherPlaintextPassword = "not_bacon";
-
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
     email: "",
   });
+  const [checkPassword, setCheckPassword] = useState(null);
 
   const getValue = (e) => {
     const { name, value } = e.target;
