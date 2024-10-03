@@ -53,8 +53,10 @@ function JoinForm() {
         router.push("/");
       }
     } catch (error) {
+      // console.log("error = ", error);
       if (error.response) {
-        alert("에러");
+        // console.log("error.response = ", error.response);
+        alert(error.response.data.message);
       }
     }
   };
