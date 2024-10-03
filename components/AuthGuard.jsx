@@ -20,7 +20,7 @@ function AuthGuard({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log("user 정보 = ", user);
+        // console.log("user 정보 = ", user);
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
