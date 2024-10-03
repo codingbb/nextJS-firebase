@@ -1,5 +1,6 @@
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
+import bcrypt from "bcryptjs";
 
 export async function POST(request) {
   console.log("POST 요청 받음");
@@ -10,11 +11,18 @@ export async function POST(request) {
 
     const { username, password, email } = dataJson; // username과 password 추출
 
+    // bcrypt
+    const saltRounds = 10;
+    // 비동기 방식으로 해시
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    console.log("hashedPassword = " + hashedPassword);
+    // bcrypt end
+
     // Firebase Firestore에 카테고리 추가
     const docRef = await addDoc(collection(db, "user"), {
       // userId:"auth하고 넣으세요, pk키는 자동으로 생성이 되지요 "
       username: username,
-      password: password,
+      password: hashedPassword,
       email: email,
       //   serverTimestamp() : 쓰는거 맞겟지요
       createdAt: serverTimestamp(),
@@ -34,16 +42,3 @@ export async function POST(request) {
     );
   }
 }
-
-// app/api/join/route.jsx
-
-// export async function POST(req) {
-//   const body = await req.json();
-//   const { username, password, email } = body;
-
-//   // 여기서 회원가입 로직을 처리합니다 (예: 데이터베이스 저장 등)
-
-//   return new Response(JSON.stringify({ message: "회원가입 성공" }), {
-//     status: 200,
-//   });
-// }
