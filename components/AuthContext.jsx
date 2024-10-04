@@ -62,7 +62,7 @@ export function AuthProvider({ children }) {
     return <div>Loading...</div>;
   }
 
-  console.log("AuthContext = isLoggedIn = ", isLoggedIn, userObj);
+  // console.log("AuthContext = isLoggedIn = ", isLoggedIn, userObj);
 
   return (
     <AuthContext.Provider

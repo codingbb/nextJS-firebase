@@ -7,12 +7,13 @@ export async function POST(request) {
   try {
     const dataJson = await request.json(); // request에서 JSON 데이터 읽기
     console.log("!1 = ", dataJson);
-    const { category } = dataJson; // JSON 데이터에서 category 필드 읽기
-    console.log(category);
+
+    const { userId, category } = dataJson; // JSON 데이터에서 category 필드 읽기
+    console.log(userId, category);
 
     // Firebase Firestore에 카테고리 추가
     const docRef = await addDoc(collection(db, "category"), {
-      // userId:"auth하고 넣으세요, pk키는 자동으로 생성이 되지요 "
+      usrId: userId,
       categoryName: category,
       //   serverTimestamp() : 쓰는거 맞겟지요
       createdAt: serverTimestamp(),
