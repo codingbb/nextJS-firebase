@@ -9,16 +9,21 @@ import { auth } from "@/firebase/firebase";
 
 function Navigation() {
   const path = usePathname(); //현재 경로 가져오기
-  const { isLoggedIn, userObj } = useAuth();
+  const { isLoggedIn, userObj, logoutUser } = useAuth();
+
+  // const onLogoutClick = () => {
+  //   signOut(auth)
+  //     .then(() => {
+  //       alert("로그아웃 되었습니다");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const onLogoutClick = () => {
-    signOut(auth)
-      .then(() => {
-        alert("로그아웃 되었습니다");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    logoutUser(); // 일반 로그아웃도 처리
+    alert("로그아웃 되었습니다");
   };
 
   return (

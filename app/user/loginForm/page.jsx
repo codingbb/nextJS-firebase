@@ -6,6 +6,7 @@ import { useState } from "react";
 import useSocialLogin from "@/app/api/auth/google";
 import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 import {
   // getAuth,
@@ -13,21 +14,13 @@ import {
   GithubAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { useAuth } from "@/components/AuthContext";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  // const [value, getValue] = useGetFieldsValue({
-  //   username: "",
-  //   password: "",
-  // });
-
-  // console.log("Vale ", value);
-  // console.log("getVale ", getValue);
-
-  // 인증과 관련된 것들 초기화
-  // const auth = getAuth();
+  const { loginUser } = useAuth(); // AuthContext에서 로그인 함수 가져오기
 
   const [formData, setFormData] = useState({
     username: "",
@@ -42,6 +35,32 @@ function LoginForm() {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const onLoginClick = async (e) => {
+    e.preventDefault();
+    const { username, password } = formData;
+
+    try {
+      const response = await axios.post("/api/login", {
+        username,
+        password,
+      });
+      console.log("Front response = ", response);
+      const userData = response.data.id;
+
+      if (response.status === 200) {
+        alert("로그인 성공");
+        console.log("userData ID ", response);
+        // loginUser(response); // AuthContext에 상태 저장
+        loginUser(userData); // AuthContext에 상태 저장
+        router.push("/");
+      }
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message);
+      }
+    }
   };
 
   // 일단 빼지말고 해봅시다
@@ -134,6 +153,8 @@ function LoginForm() {
             <button
               type="submit"
               className="w-full bg-gray-400 text-white p-2 rounded mt-4"
+              name="login"
+              onClick={onLoginClick}
             >
               로그인
             </button>
