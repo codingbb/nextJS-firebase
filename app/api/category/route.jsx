@@ -45,7 +45,7 @@ export async function POST(request) {
 
 // 카테고리 리스트 줘
 export async function GET(request) {
-  console.log("Category GET 실행");
+  console.log("Category List GET 실행");
 
   try {
     const { searchParams } = new URL(request.url);

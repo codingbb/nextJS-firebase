@@ -9,7 +9,7 @@ export async function DELETE(request) {
   try {
     const { pathname } = new URL(request.url);
     const id = pathname.split("/").pop(); // URL에서 ID 추출
-    console.log("id ", id); // fVSrmnWxN1Su30ozY4dk
+    // console.log("id ", id); // fVSrmnWxN1Su30ozY4dk
 
     // Firebase Firestore에 카테고리 삭제
     await deleteDoc(doc(db, "category", id));
