@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { debounce } from "lodash";
 
 function JoinForm() {
   const router = useRouter();
@@ -28,13 +29,14 @@ function JoinForm() {
     e.preventDefault();
 
     // console.log("확인 ", formData.username, formData.password, formData.email);
-    const { username, password, email } = formData;
+    const { username, password, confirmPassword, email } = formData;
     console.log("확인 ", username, password, email);
 
     try {
       const response = await axios.post("/api/join", {
         username,
         password,
+        confirmPassword,
         email,
       });
       console.log("Front response = ", response);
@@ -51,6 +53,21 @@ function JoinForm() {
       }
     }
   };
+
+  const checkPasswords = useCallback(
+    debounce(() => {
+      if (formData.password !== formData.confirmPassword) {
+        setCheckPassword(false);
+      } else {
+        setCheckPassword(true);
+      }
+    }, 500),
+    [formData.password, formData.confirmPassword]
+  );
+
+  useEffect(() => {
+    checkPasswords();
+  }, [formData.password, formData.confirmPassword, checkPasswords]);
 
   return (
     <>
@@ -105,6 +122,11 @@ function JoinForm() {
                 className="w-full p-2 border border-gray-300 rounded mt-1"
                 required
               />
+              {!checkPassword && (
+                <span className="text-red-500 mb-2">
+                  비밀번호가 일치하지 않습니다
+                </span>
+              )}
             </div>
 
             <div className="mb-4">

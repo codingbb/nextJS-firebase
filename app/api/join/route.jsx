@@ -14,9 +14,16 @@ export async function POST(request) {
 
   try {
     const dataJson = await request.json(); // request에서 JSON 데이터 읽기
-    // console.log("dataJson = " + JSON.stringify(dataJson));
+    console.log("dataJson = " + JSON.stringify(dataJson));
 
-    const { username, password, email } = dataJson; // username과 password 추출
+    const { username, password, confirmPassword, email } = dataJson; // username과 password 추출
+
+    if (password !== confirmPassword) {
+      return new Response(
+        JSON.stringify({ message: "비밀번호가 일치하지 않습니다." }),
+        { status: 400 }
+      );
+    }
 
     // 중복된 username이 있는지 확인 로직 필요
     const q = query(collection(db, "user"), where("username", "==", username));
