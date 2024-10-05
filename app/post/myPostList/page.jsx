@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthContext";
 import React, { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 
 export default function MyPostList() {
   const [postList, setPostList] = useState([]);
@@ -42,6 +43,17 @@ export default function MyPostList() {
 
   console.log("postList = ", postList);
 
+  // TODO: 애도 컴포넌트로 빼면 좋겠다
+  // 이미지 태그 제거 함수
+  const removeImagesFromContent = (content) => {
+    // 이미지 태그 제거
+    const cleanedContent = content.replace(/<img[^>]*src="[^"]*"[^>]*>/gi, "");
+    // 남은 HTML 태그 제거 (예: <p>, <br> 등)
+    const textOnly = cleanedContent.replace(/<[^>]+>/g, " ");
+    // 남은 공백 및 줄바꿈 정리
+    return textOnly.replace(/\s+/g, " ").trim();
+  };
+
   return (
     <div className="max-w-4xl mx-auto py-10">
       <div className="flex flex-row justify-between">
@@ -55,31 +67,35 @@ export default function MyPostList() {
       {/* 각 포스트를 반복하여 렌더링 */}
       <div className="flex flex-col mb-8">
         {postList.length > 0 ? (
-          postList.map((post) => (
-            <div
-              key={post.id}
-              className="flex flex-row mb-4 border rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:cursor-pointer"
-            >
-              <div className="flex justify-center">
-                <Image
-                  src={post.thumbnailFile}
-                  alt="Thumbnail"
-                  width={350}
-                  height={200}
-                />
-              </div>
-              <a href={`/post/${post.id}`}>
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-                  {/* <p className="text-gray-600 mb-4">{post.createdAt}</p> */}
-                  <p className="text-gray-600 mb-4">
-                    {new Date(post.createdAt.seconds * 1000).toLocaleString()}
-                  </p>
-                  <p className="text-gray-800 mb-4">{post.content}</p>
+          postList.map((post) => {
+            const cleanContent = DOMPurify.sanitize(post.content);
+            const textOnly = removeImagesFromContent(cleanContent);
+
+            return (
+              <div
+                key={post.id}
+                className="flex flex-row mb-4 border rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:cursor-pointer"
+              >
+                <div className="flex justify-center">
+                  <Image
+                    src={post.thumbnailFile}
+                    alt="Thumbnail"
+                    width={350}
+                    height={200}
+                  />
                 </div>
-              </a>
-            </div>
-          ))
+                <a href={`/post/${post.id}`}>
+                  <div className="p-6">
+                    <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+                    <p className="text-gray-600 mb-4">
+                      {new Date(post.createdAt.seconds * 1000).toLocaleString()}
+                    </p>
+                    <p className="text-gray-800 mb-4">{textOnly}</p>
+                  </div>
+                </a>
+              </div>
+            );
+          })
         ) : (
           <p>게시글이 없습니다.</p> // 게시글이 없을 때 메시지
         )}
