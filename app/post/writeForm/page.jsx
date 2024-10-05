@@ -21,7 +21,7 @@ export default function WriteForm() {
     title: "",
     content: "",
     // 일단 file 생략
-    file: null,
+    // file: null,
   });
 
   // TODO: 반복되니까 이것도 컴포넌트로 빼면은 좋겠다
@@ -67,16 +67,17 @@ export default function WriteForm() {
     }
   }, [isLoading, categoryList]); // categoryList 넣어야하남 ..
 
+  // api 요청
   const onsubmit = async (e) => {
     e.preventDefault();
 
-    const { selectedCategory, title, content, file } = formData;
+    const { selectedCategory, title, content } = formData;
     console.log(
       "넘어가는 데이터 확인 ",
       selectedCategory,
       title,
       content,
-      file
+      attachment
     );
 
     try {
@@ -85,7 +86,8 @@ export default function WriteForm() {
         selectedCategory,
         title,
         content,
-        file,
+        // file, 을 주나? 지금 이건 base64로 서버에 때려넣는데 ㅠ
+        attachment,
       });
 
       if (response.status === 200) {
