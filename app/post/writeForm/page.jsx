@@ -6,12 +6,14 @@ import dynamic from "next/dynamic";
 import { quillModules } from "@/components/QuillModules";
 import { useAuth } from "@/components/AuthContext";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function WriteForm() {
   const { userObj } = useAuth(); // 로그인 한 사용자 정보 가져오기 !
   const [categoryList, setCategoryList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [attachment, setAttachment] = useState();
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -19,7 +21,7 @@ export default function WriteForm() {
     title: "",
     content: "",
     // 일단 file 생략
-    // file: "",
+    file: null,
   });
 
   // TODO: 반복되니까 이것도 컴포넌트로 빼면은 좋겠다
@@ -65,10 +67,72 @@ export default function WriteForm() {
     }
   }, [isLoading, categoryList]); // categoryList 넣어야하남 ..
 
+  const onsubmit = async (e) => {
+    e.preventDefault();
+
+    const { selectedCategory, title, content, file } = formData;
+    console.log(
+      "넘어가는 데이터 확인 ",
+      selectedCategory,
+      title,
+      content,
+      file
+    );
+
+    try {
+      const response = await axios.post("/api/post/write", {
+        userId,
+        selectedCategory,
+        title,
+        content,
+        file,
+      });
+
+      if (response.status === 200) {
+        alert("게시글이 성공적으로 등록되었습니다!");
+        // router.push(내가쓴게시글로 ㄱㄱ)
+      }
+    } catch (error) {
+      console.log("write error");
+      return "write error !! ";
+    }
+  };
+
+  //  file
+  const onFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      file: selectedFile,
+    }));
+
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      const result = e.target.result;
+      // URL 값 읽어와서 set
+      setAttachment(result);
+    };
+    // blob을 url로 변경해서 읽기
+    reader.readAsDataURL(selectedFile);
+  };
+
+  console.log("attachment = ", attachment);
+
+  console.log("title = ", formData.title);
+  console.log("content = ", formData.content);
+  console.log("file = ", formData.file);
+
   return (
     <>
-      <form>
-        <select className="w-full p-2 mt-3 border rounded-md">
+      <form onSubmit={onsubmit}>
+        <select
+          className="w-full p-2 mt-3 border rounded-md"
+          value={formData.selectedCategory}
+          // e.target.value는 카테고리 pk키가 나옴
+          onChange={(e) =>
+            setFormData({ ...formData, selectedCategory: e.target.value })
+          }
+        >
           <option value="">카테고리를 선택하세요</option>
           {categoryList.length > 0 &&
             categoryList.map((category) => (
@@ -83,14 +147,17 @@ export default function WriteForm() {
           type="text"
           placeholder="제목을 입력하세요"
           className="w-full p-2 mt-3 border rounded-md"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
         />
 
         <div className="mb-10 mt-3">
           <ReactQuill
             id="content"
             theme="snow"
-            value="value"
-            // onChange={setValue}
+            value={formData.content}
+            // 퀼에디터는 value값으로 넣어줘야함 !
+            onChange={(value) => setFormData({ ...formData, content: value })}
             modules={quillModules}
             style={{ height: "500px" }}
           />
@@ -100,8 +167,22 @@ export default function WriteForm() {
           <input
             id="file"
             type="file"
+            accept="image/*" // 이미지만 허용 해주는 속성값
+            onChange={onFileChange}
             className="w-full p-2 mt-3 border rounded-md"
           />
+        </div>
+        <div>
+          <p>
+            {attachment && (
+              <Image
+                src={attachment}
+                width={500}
+                height={100}
+                alt="이미지에요"
+              />
+            )}
+          </p>
         </div>
 
         <button
