@@ -87,6 +87,7 @@ export default function WriteForm() {
         title,
         content,
         // file, 을 주나? 지금 이건 base64로 서버에 때려넣는데 ㅠ
+        // TODO: base64 쌩으로 때려넣기... 이게 옳은가? 돌아는가는데 ㅠ
         attachment,
       });
 
