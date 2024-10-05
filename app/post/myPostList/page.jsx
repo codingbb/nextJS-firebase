@@ -20,7 +20,8 @@ export default function MyPostList() {
   }
 
   // 일반 로그인과 구글, 깃허브 로그인의 구분을 위한 PK 확인.. 2개가 다르게 담겨있어서 ㅜㅜ
-  const userId = userObj.uid ? userObj.uid : userObj;
+  const userId = userObj.uid ? userObj.uid : userObj.id;
+  console.log("어디 ? ", userObj.displayName);
 
   useEffect(() => {
     const getPostList = async () => {
@@ -41,7 +42,7 @@ export default function MyPostList() {
     getPostList();
   }, [userId]);
 
-  console.log("postList = ", postList);
+  // console.log("postList = ", postList);
 
   // TODO: 애도 컴포넌트로 빼면 좋겠다
   // 이미지 태그 제거 함수
@@ -57,7 +58,9 @@ export default function MyPostList() {
   return (
     <div className="max-w-4xl mx-auto py-10">
       <div className="flex flex-row justify-between">
-        <h1 className="text-4xl font-bold mb-10">사용자 이름's Blog</h1>
+        <h1 className="text-4xl font-bold mb-10">
+          {userObj.displayName}'s Blog
+        </h1>
         <a href="/post/writeForm">
           <h1 className="text-4xl font-bold mb-10 bg-teal-600 rounded-full p-2">
             <Link href="/post/writeForm">✏️</Link>

@@ -26,7 +26,7 @@ export async function POST(request) {
 
     // 존재하면 비교
     const userData = querySnapshot.docs[0].data();
-    console.log("userData ", userData);
+    // console.log("userData ", userData);
     const hashedPassword = userData.password; // db의 password 가져오기
 
     // bcrypt.compare()로 해시된 비밀번호 비교
@@ -39,7 +39,11 @@ export async function POST(request) {
     }
 
     return new Response(
-      JSON.stringify({ message: "로그인 성공", id: querySnapshot.docs[0].id }),
+      JSON.stringify({
+        message: "로그인 성공",
+        id: querySnapshot.docs[0].id,
+        displayName: username,
+      }),
       { status: 200 }
     );
   } catch (error) {

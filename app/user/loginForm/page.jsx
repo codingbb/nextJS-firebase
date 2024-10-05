@@ -47,11 +47,13 @@ function LoginForm() {
         password,
       });
       console.log("Front response = ", response);
-      const userData = response.data.id;
+      const userData = response.data;
+      // console.log("userData ", userData);
+      // console.log("data mini ", response.data);
 
       if (response.status === 200) {
         alert("로그인 성공");
-        console.log("userData ID ", response);
+        // console.log("userData ID ", response);
         // loginUser(response); // AuthContext에 상태 저장
         loginUser(userData); // AuthContext에 상태 저장
         router.push("/");
