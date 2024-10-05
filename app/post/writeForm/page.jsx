@@ -32,7 +32,7 @@ export default function WriteForm() {
   }
 
   // 일반 로그인과 구글, 깃허브 로그인의 구분을 위한 PK 확인.. 2개가 다르게 담겨있어서 ㅜㅜ
-  const userId = userObj.uid ? userObj.uid : userObj;
+  const userId = userObj.uid ? userObj.uid : userObj.id;
 
   // TODO: 이부분 컴포넌트로 빼면 참 좋겠다
   // 내가 작성한 카테고리 리스트 뿌릴거임

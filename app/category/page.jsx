@@ -18,7 +18,7 @@ export default function CategoryForm() {
   }
 
   // 일반 로그인과 구글, 깃허브 로그인의 구분을 위한 PK 확인.. 2개가 다르게 담겨있어서 ㅜㅜ
-  const userId = userObj.uid ? userObj.uid : userObj;
+  const userId = userObj.uid ? userObj.uid : userObj.id;
 
   // 카테고리 저장 로직
   const onsubmit = async (e) => {
