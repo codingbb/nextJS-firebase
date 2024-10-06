@@ -22,7 +22,7 @@ export default function Home() {
           // random 하게 limit 짤라오는게 없어서 이렇게 써야함 ...
           const shuffledPosts = response.data
             .sort(() => 0.5 - Math.random())
-            .slice(0, 2);
+            .slice(0, 4);
 
           setPostList(shuffledPosts);
         }
