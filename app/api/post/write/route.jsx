@@ -27,8 +27,9 @@ export async function POST(request) {
     const dataJson = await request.json(); // request에서 JSON 데이터 읽기
     console.log("들어온 데이터 = ", dataJson);
 
-    const { userId, selectedCategory, title, content, attachment } = dataJson; // JSON 데이터에서 필드 읽기
-    console.log(userId, selectedCategory, title, content, attachment);
+    const { userId, selectedCategory, title, content, attachment, username } =
+      dataJson; // JSON 데이터에서 필드 읽기
+    console.log(userId, selectedCategory, title, content, attachment, username);
 
     // 이미지 따로 저장
     // const storageRef = ref(storage, `${userId}/${uuidv4()}`);
@@ -47,6 +48,7 @@ export async function POST(request) {
     // Firebase Firestore에 카테고리 추가
     const docRef = await addDoc(collection(db, "post"), {
       userId: userId,
+      username: username,
       categoryId: selectedCategory,
       title: title,
       content: content,

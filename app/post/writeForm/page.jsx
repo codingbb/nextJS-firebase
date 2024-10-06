@@ -33,6 +33,7 @@ export default function WriteForm() {
 
   // 일반 로그인과 구글, 깃허브 로그인의 구분을 위한 PK 확인.. 2개가 다르게 담겨있어서 ㅜㅜ
   const userId = userObj.uid ? userObj.uid : userObj.id;
+  const username = userObj.displayName;
 
   // TODO: 이부분 컴포넌트로 빼면 참 좋겠다
   // 내가 작성한 카테고리 리스트 뿌릴거임
@@ -77,7 +78,8 @@ export default function WriteForm() {
       selectedCategory,
       title,
       content,
-      attachment
+      attachment,
+      username
     );
 
     try {
@@ -89,6 +91,7 @@ export default function WriteForm() {
         // file, 을 주나? 지금 이건 base64로 서버에 때려넣는데 ㅠ
         // TODO: base64 쌩으로 때려넣기... 이게 옳은가? 돌아는가는데 ㅠ
         attachment,
+        username,
       });
 
       if (response.status === 200) {
