@@ -9,7 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
-// 카테고리 저장
+// 댓글 저장
 export async function POST(request) {
   console.log("Reply POST 실행");
 
@@ -17,12 +17,13 @@ export async function POST(request) {
     const dataJson = await request.json(); // request에서 JSON 데이터 읽기
     console.log("Data = ", dataJson);
 
-    const { userId, postId, comment } = dataJson; // JSON 데이터에서 category 필드 읽기
-    console.log(userId, postId, comment);
+    const { userId, username, postId, comment } = dataJson; // JSON 데이터에서 category 필드 읽기
+    console.log(userId, username, postId, comment);
 
     // Firebase Firestore에 카테고리 추가
     const docRef = await addDoc(collection(db, "reply"), {
       userId: userId,
+      username: username,
       postId: postId,
       comment: comment,
       //   serverTimestamp() : 쓰는거 맞겟지요
@@ -44,9 +45,8 @@ export async function POST(request) {
   }
 }
 
-// 카테고리 리스트 줘
 export async function GET(request) {
-  console.log("Category List GET 실행");
+  console.log("Reply List GET 실행");
 
   try {
     const { searchParams } = new URL(request.url);

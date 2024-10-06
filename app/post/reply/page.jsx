@@ -11,6 +11,8 @@ export default function Reply({ userObj, postId, userId }) {
 
   const [repliesRes, setRepliesRes] = useState([]);
   const [comment, setComment] = useState();
+  const username = userObj.displayName;
+  console.log("username 111", username);
 
   // 댓글 조회
   //   useEffect(() => {
@@ -39,6 +41,7 @@ export default function Reply({ userObj, postId, userId }) {
     try {
       const response = await axios.post("/api/reply", {
         userId,
+        username,
         postId,
         comment,
       });
