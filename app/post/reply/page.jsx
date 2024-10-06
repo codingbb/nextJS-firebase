@@ -60,6 +60,27 @@ export default function Reply({ userObj, postId, userId }) {
 
   //   console.log("reply Value = ", comment);
 
+  const onDelete = async (replyId) => {
+    const confirmDelete = window.confirm("이 댓글을 삭제하시겠습니까?");
+    if (!confirmDelete) return;
+
+    try {
+      const response = await axios.delete(`/api/reply/${replyId}`);
+
+      if (response.status === 200) {
+        alert("댓글이 삭제되었습니다!");
+        // 삭제된 댓글을 제외한 새로운 리스트로 업데이트
+        const updatedReplies = repliesRes.filter(
+          (reply) => reply.id !== replyId
+        );
+        setRepliesRes(updatedReplies);
+      }
+    } catch (error) {
+      console.log("카테고리 삭제 중 error");
+      return "error !! ";
+    }
+  };
+
   return (
     <>
       {/* 댓글 뷰 */}
@@ -106,7 +127,10 @@ export default function Reply({ userObj, postId, userId }) {
                     <button className="border p-2 bg-teal-600 rounded-md text-white hover:bg-teal-800">
                       수정
                     </button>
-                    <button className="border p-2 bg-red-700 rounded-md text-white mr-5 hover:bg-red-800">
+                    <button
+                      onClick={() => onDelete(reply.id)}
+                      className="border p-2 bg-red-700 rounded-md text-white mr-5 hover:bg-red-800"
+                    >
                       삭제
                     </button>
                   </div>
