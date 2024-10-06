@@ -30,10 +30,17 @@ export async function POST(request) {
       createdAt: serverTimestamp(),
     });
 
-    return new Response(
-      JSON.stringify({ message: "Comment added", id: docRef.id }),
-      { status: 200 }
-    );
+    // 댓글 등록하자마자 나오게 하려고 ...
+    const addReply = {
+      id: docRef.id,
+      userId: userId,
+      username: username,
+      postId: postId,
+      comment: comment,
+      createdAt: new Date(), // serverTimestamp()는 서버에서만 처리되므로, 클라이언트에서는 대체로 현재 시간으로 설정
+    };
+
+    return new Response(JSON.stringify(addReply), { status: 200 });
   } catch (error) {
     return new Response(
       JSON.stringify({
@@ -50,36 +57,36 @@ export async function GET(request) {
 
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const postId = searchParams.get("postId");
 
-    console.log("PK키 ", userId);
+    console.log("PK키 ", postId);
 
-    if (!userId) {
-      return new Response(JSON.stringify({ message: "userId가 없습니다!" }), {
+    if (!postId) {
+      return new Response(JSON.stringify({ message: "POST 가 없습니다!" }), {
         status: 400,
       });
     }
 
     // Firebase Firestore에서 데이터 가져오기
     const q = query(
-      collection(db, "category"),
-      where("userId", "==", userId),
+      collection(db, "reply"),
+      where("postId", "==", postId),
       orderBy("createdAt", "desc")
     );
     const querySnapshot = await getDocs(q);
     // console.log("querySnapshot ", querySnapshot);
 
-    const categories = querySnapshot.docs.map((doc) => ({
+    const replies = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    // console.log("categories = ", categories);
+    console.log("replies = ", replies);
 
-    return new Response(JSON.stringify(categories), { status: 200 });
+    return new Response(JSON.stringify(replies), { status: 200 });
   } catch (error) {
     return new Response(
       JSON.stringify({
-        message: "Error category List",
+        message: "Error reply List",
         error: error.message,
       }),
       { status: 500 }
