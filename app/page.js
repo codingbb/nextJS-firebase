@@ -74,6 +74,9 @@ export default function Home() {
                       <div className="text-2xl text-teal-500 w-auto mt-3 mb-8">
                         {post.title}
                       </div>
+                      <div className="text-xl text-blue-600 w-auto mt-3 mb-8">
+                        작성자 : {post.username}
+                      </div>
                       <p className="text-gray-600 mb-4">
                         {new Date(
                           post.createdAt.seconds * 1000
