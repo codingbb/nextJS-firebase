@@ -8,6 +8,8 @@ export default function Reply({ userObj, postId, userId }) {
 
   const [repliesRes, setRepliesRes] = useState([]);
   const [comment, setComment] = useState();
+  const [updateComment, setUpdateComment] = useState();
+  const [editMode, setEditMode] = useState(null); // 수정 모드
   const username = userObj.displayName;
   //   console.log("username 111", username);
 
@@ -60,6 +62,7 @@ export default function Reply({ userObj, postId, userId }) {
 
   //   console.log("reply Value = ", comment);
 
+  //   댓글 삭제
   const onDelete = async (replyId) => {
     const confirmDelete = window.confirm("이 댓글을 삭제하시겠습니까?");
     if (!confirmDelete) return;
@@ -81,9 +84,38 @@ export default function Reply({ userObj, postId, userId }) {
     }
   };
 
+  //   수정 모드
+  const toggleEditMode = (reply) => {
+    setEditMode(reply.id); // 수정할 댓글 ID로 설정 (true, false보단 이게 나은듯)
+    setUpdateComment(reply.comment); // 수정모드로 들어가면 댓글 기존 내용을 일단 넣어줌
+  };
+
+  // 댓글 수정
+  const onUpdate = async (replyId) => {
+    try {
+      const response = await axios.put(`/api/reply/${replyId}`, {
+        comment: updateComment,
+      });
+
+      if (response.status === 200) {
+        alert("댓글이 수정되었습니다!");
+
+        // 댓글 리스트에서 수정된 댓글 업데이트
+        const updatedReplies = repliesRes.map((reply) =>
+          // 다른건 다 유지하면서, comment만 update 된걸로 샥 바꿈
+          reply.id === replyId ? { ...reply, comment: updateComment } : reply
+        );
+
+        setRepliesRes(updatedReplies);
+        setEditMode(null); // 수정 모드 해제
+      }
+    } catch (error) {
+      console.log("댓글 수정 중 error");
+    }
+  };
+
   return (
     <>
-      {/* 댓글 뷰 */}
       <div className="flex flex-col p-6 bg-white rounded-lg border">
         <form onSubmit={onsubmit}>
           <textarea
@@ -102,7 +134,6 @@ export default function Reply({ userObj, postId, userId }) {
           {repliesRes.length > 0 ? (
             repliesRes.map((reply) => (
               <div key={reply.id}>
-                {/* 댓글1 */}
                 <div className="flex items-start p-4 bg-gray-100 rounded-lg shadow-sm">
                   <div className="flex-shrink-0 mr-3">
                     <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
@@ -111,10 +142,16 @@ export default function Reply({ userObj, postId, userId }) {
                   </div>
                   <div>
                     <div className="text-sm font-bold">{reply.username}</div>
-                    <div className="text-gray-700">{reply.comment}</div>
-                    <br></br>
-                    {/* id 숨기기  */}
-                    {/* <div className="hidden">{reply.id}</div> */}
+
+                    {editMode === reply.id ? (
+                      <textarea
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        value={updateComment}
+                        onChange={(e) => setUpdateComment(e.target.value)}
+                      />
+                    ) : (
+                      <div className="text-gray-700">{reply.comment}</div>
+                    )}
                     <div className="text-sm">
                       {new Date(
                         reply.createdAt.seconds * 1000
@@ -122,11 +159,31 @@ export default function Reply({ userObj, postId, userId }) {
                     </div>
                   </div>
                 </div>
-                {userObj && userId == reply.userId && (
+                {userObj && userId === reply.userId && (
                   <div className="flex flex-row justify-end">
-                    <button className="border p-2 bg-teal-600 rounded-md text-white hover:bg-teal-800">
-                      수정
-                    </button>
+                    {editMode === reply.id ? (
+                      <>
+                        <button
+                          onClick={() => onUpdate(reply.id)}
+                          className="border p-2 bg-teal-600 rounded-md text-white hover:bg-teal-800"
+                        >
+                          저장
+                        </button>
+                        <button
+                          onClick={() => setEditMode(null)} // 취소 버튼 클릭 시 수정모드 해제
+                          className="border p-2 bg-gray-500 rounded-md text-white hover:bg-gray-700"
+                        >
+                          취소
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => toggleEditMode(reply)}
+                        className="border p-2 bg-teal-600 rounded-md text-white hover:bg-teal-800"
+                      >
+                        수정
+                      </button>
+                    )}
                     <button
                       onClick={() => onDelete(reply.id)}
                       className="border p-2 bg-red-700 rounded-md text-white mr-5 hover:bg-red-800"
