@@ -6,35 +6,19 @@ import { useAuth } from "@/components/AuthContext";
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 
-export default function Reply(userObj, postId, userId) {
-  console.log("Reply 확인 = ", userObj, postId, userId);
+export default function Reply({ userObj, postId, userId }) {
+  //   console.log("Reply 확인 = ", userObj, postId, userId);
 
   const [repliesRes, setRepliesRes] = useState([]);
+  const [comment, setComment] = useState();
 
-  //   const { userObj } = useAuth();
-  //   const [post, setPost] = useState();
-  //   const [repliesRes, setRepliesRes] = useState([]);
-
-  //   const { id } = params;
-  //   // console.log("이게 됨 ? ", id); // 되네... 주소창에서 잘 가져옴. 그러나! id로 가져와야함. postId로는 못가져오더라
-  //   const postId = id;
-  //   console.log("이게 됨 ? ", postId);
-
-  //   // isOwner 용 // 이렇게하니까 밑에서 userId로 접근을 못함
-  //   // if (userObj) {
-  //   //   // 일반 로그인과 구글, 깃허브 로그인의 구분을 위한 PK 확인.. 2개가 다르게 담겨있어서 ㅜㅜ
-  //   //   const userId = userObj.uid ? userObj.uid : userObj.id;
-  //   //   // console.log("userId = ", userId);   //user pk
-  //   //   // console.log("어디 ? ", userObj.displayName);  // kia, ssar
-  //   // }
-
-  //   const userId = userObj ? userObj.uid || userObj.id : null;
-
-  //   // 게시글 + 댓글 조회
+  // 댓글 조회
   //   useEffect(() => {
-  //     const getPostAndReply = async () => {
+  //     const getReply = async () => {
   //       try {
-  //         const response = await axios.get(`/api/post/${postId}`);
+  //         const response = await axios.get("/api/reply", {
+  //           params: { postId },
+  //         });
 
   //         if (response.status === 200) {
   //           console.log("response data = ", response.data);
@@ -45,36 +29,42 @@ export default function Reply(userObj, postId, userId) {
   //         return "error !! ";
   //       }
   //     };
-  //     getPostAndReply();
-  //   }, [postId, userObj]);
+  //     getReply();
+  //   }, [postId, userObj, repliesRes]);
 
-  //   // 비동기라.. 로드가 다 되면 출력하게 기다리라고 띄워주기 (이거 loading 페이지 있으면 참 좋겠따)
-  //   if (!post) {
-  //     return <div>Loading...</div>;
-  //   }
+  // 댓글 저장
+  const onsubmit = async (e) => {
+    e.preventDefault();
 
-  //   // TODO: 애도 컴포넌트로 빼면 좋겠다
-  //   // 이미지 태그 제거 함수
-  //   const removeImagesFromContent = (content) => {
-  //     // 이미지 태그 제거
-  //     const cleanedContent = content.replace(/<img[^>]*src="[^"]*"[^>]*>/gi, "");
-  //     // 남은 HTML 태그 제거 (예: <p>, <br> 등)
-  //     const textOnly = cleanedContent.replace(/<[^>]+>/g, " ");
-  //     // 남은 공백 및 줄바꿈 정리
-  //     return textOnly.replace(/\s+/g, " ").trim();
-  //   };
+    try {
+      const response = await axios.post("/api/reply", {
+        userId,
+        postId,
+        comment,
+      });
 
-  //   const cleanContent = DOMPurify.sanitize(post.content);
-  //   const textOnly = removeImagesFromContent(cleanContent);
+      if (response.status === 200) {
+        alert("댓글이 성공적으로 등록되었습니다!");
+        setComment("");
+      }
+    } catch (error) {
+      console.log("error");
+      return "error !! ";
+    }
+  };
+
+  console.log("reply Value = ", comment);
 
   return (
     <>
       {/* 댓글 뷰 */}
       <div className="flex flex-col p-6 bg-white rounded-lg border">
-        <form>
+        <form onSubmit={onsubmit}>
           <textarea
             className="w-full h-24 p-2 border border-gray-300 rounded-md"
             placeholder="댓글을 입력하세요"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
           />
           <button className="mt-2 w-full bg-teal-500 text-white py-2 rounded-md hover:bg-teal-700">
             등록

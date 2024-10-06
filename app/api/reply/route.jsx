@@ -11,31 +11,32 @@ import { db } from "@/firebase/firebase";
 
 // 카테고리 저장
 export async function POST(request) {
-  console.log("Category POST 실행");
+  console.log("Reply POST 실행");
 
   try {
     const dataJson = await request.json(); // request에서 JSON 데이터 읽기
-    console.log("!1 = ", dataJson);
+    console.log("Data = ", dataJson);
 
-    const { userId, category } = dataJson; // JSON 데이터에서 category 필드 읽기
-    console.log(userId, category);
+    const { userId, postId, comment } = dataJson; // JSON 데이터에서 category 필드 읽기
+    console.log(userId, postId, comment);
 
     // Firebase Firestore에 카테고리 추가
-    const docRef = await addDoc(collection(db, "category"), {
+    const docRef = await addDoc(collection(db, "reply"), {
       userId: userId,
-      categoryName: category,
+      postId: postId,
+      comment: comment,
       //   serverTimestamp() : 쓰는거 맞겟지요
       createdAt: serverTimestamp(),
     });
 
     return new Response(
-      JSON.stringify({ message: "Category added", id: docRef.id }),
+      JSON.stringify({ message: "Comment added", id: docRef.id }),
       { status: 200 }
     );
   } catch (error) {
     return new Response(
       JSON.stringify({
-        message: "Error adding category",
+        message: "Error adding comment",
         error: error.message,
       }),
       { status: 500 }
